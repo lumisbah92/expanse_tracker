@@ -1,31 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../../contexts/AuthContext';
+import SideBar from '../Sidebar';
+import Header from '../Header';
+import svgIcons from '../../../services/svgService';
+import CreateOffer from './CreateOffer';
 
-const Transactions = () => {
+export interface NavItem {
+  label: string;
+  path: string;
+  icon: string;
+}
+
+const navItems: NavItem[] = [
+  { label: 'Dashboard', path: '/', icon: svgIcons.dashboard },
+  { label: 'Transactions', path: '/transactions', icon:  svgIcons.transactions },
+];
+
+const Transactions: React.FC = () => {
+  const { user, logout } = useAuth();
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (!user && !storedToken) {
+      window.location.replace('/sign-in');
+    }
+    setIsCheckingAuth(false);
+  }, [user]);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Transactions</h1>
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">Date</th>
-            <th className="border p-2">Category</th>
-            <th className="border p-2">Description</th>
-            <th className="border p-2">Amount</th>
-            <th className="border p-2">Payment Method</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border p-2">2025-02-17</td>
-            <td className="border p-2">Food</td>
-            <td className="border p-2">Lunch</td>
-            <td className="border p-2">$15</td>
-            <td className="border p-2">Credit Card</td>
-          </tr>
-        </tbody>
-      </table>
+    <div className="flex">
+      <SideBar navItems={navItems} />
+      <div className="flex flex-col flex-1">
+        <Header dropdownOpen={dropdownOpen} setDropdownOpen={setDropdownOpen} logout={logout} />
+        <div className="flex flex-col items-center flex-1 px-2 py-5">
+          <CreateOffer />
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Transactions;
