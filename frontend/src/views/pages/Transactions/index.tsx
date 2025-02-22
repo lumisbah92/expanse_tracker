@@ -3,7 +3,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import SideBar from '../Sidebar';
 import Header from '../Header';
 import svgIcons from '../../../services/svgService';
-import CreateOffer from './CreateOffer';
+import AddTransaction from './AddTransaction';
 
 export interface NavItem {
   label: string;
@@ -43,7 +43,7 @@ const Transactions: React.FC = () => {
       <div className="flex flex-col flex-1">
         <Header dropdownOpen={dropdownOpen} setDropdownOpen={setDropdownOpen} logout={logout} />
         <div className="flex flex-col items-center flex-1 px-2 py-5">
-          <CreateOffer />
+          <AddTransaction />
         </div>
       </div>
     </div>

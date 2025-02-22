@@ -25,7 +25,17 @@ const BarChart: FC<BarChartProps> = ({ transaction_amounts }) => {
     colors: ['#007867', '#FFAB00'],
     dataLabels: { enabled: false },
     xaxis: { categories: labels, axisBorder: { show: false }, axisTicks: { show: false } },
-    yaxis: { min: 0, max: Math.max(...incomeData, ...expenseData) + 10 },
+    yaxis: {
+      min: 0,
+      max: Math.ceil(Math.max(...incomeData, ...expenseData) / 100) * 100,
+      tickAmount: undefined,
+      labels: {
+        formatter: (value: number) => {
+          if (value % 100 === 0) return value.toString();
+          return '';
+        },
+      },
+    },
     legend: {
       position: 'top',
       horizontalAlign: 'right',
