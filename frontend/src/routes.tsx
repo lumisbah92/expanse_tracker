@@ -1,4 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-import LoginRoutes from './routes/LoginRoutes';
+import Routes from './routes/Routes';
 
-export const router = createBrowserRouter([LoginRoutes], {basename: "/"});
+export const router = createBrowserRouter([Routes], {basename: "/"});

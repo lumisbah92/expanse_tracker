@@ -2,18 +2,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import usePasswordVisibility from '../../../../utils/usePasswordVisibility';
 import { Eye, EyeSlash } from 'iconsax-react';
 import FormRC from '../../../../Components/form/FormRC';
+import axios from 'axios';
 
 const SignUpView = () => {
   const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
   const navigate = useNavigate();
 
-  // This function handles form submission
-  const handleLoginClick = (data: any) => {
-    console.log('Input Data:', data.email); // Log the form data to the console
-    navigate('/auth-selection'); // Navigate after form submission
+  const handleSignUpClick = async (data: any) => {
+    try {
+      console.log('Input Data:', data);
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}/auth/register`, data);
+      console.log('Response:', response.data);
+      navigate('/sign-in');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
-  // Define the fields for the form
   const fields = [
     {
       name: 'name',
@@ -41,11 +47,10 @@ const SignUpView = () => {
     <div className="flex flex-col w-full">
       <span className="text-[28px] font-semibold mb-4 leading-[36.4px] tracking-wide text-textColor">Sign Up</span>
 
-      {/* Use FormRC to render the form */}
       <FormRC
         formClassName="text-left min-w-full"
         fields={fields}
-        onSubmit={handleLoginClick} // Pass the submit handler to FormRC
+        onSubmit={handleSignUpClick}
         submitLabel="Sign Up"
       />
 
@@ -63,3 +68,4 @@ const SignUpView = () => {
 };
 
 export default SignUpView;
+

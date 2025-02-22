@@ -2,15 +2,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import usePasswordVisibility from '../../../../utils/usePasswordVisibility';
 import { Eye, EyeSlash } from 'iconsax-react';
 import FormRC from '../../../../Components/form/FormRC';
+import axios from 'axios';
 
 const SignInView = () => {
   const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
   const navigate = useNavigate();
 
-  // This function handles form submission
-  const handleLoginClick = (data: any) => {
-    console.log('Input Data:', data.email); // Log the form data to the console
-    navigate('/dashboard'); // Navigate after form submission
+  const handleSignInClick = async (data: any) => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}/auth/login`, data);
+
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   // Define the fields for the form
@@ -38,7 +46,7 @@ const SignInView = () => {
       {/* Use FormRC to render the form */}
       <FormRC
         fields={fields}
-        onSubmit={handleLoginClick} // Pass the submit handler to FormRC
+        onSubmit={handleSignInClick} // Pass the submit handler to FormRC
         submitLabel="Sign In"
       />
 

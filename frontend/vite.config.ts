@@ -6,5 +6,5 @@ export default defineConfig({
   server: {
     host: '0.0.0.0', // Exposes to the local network
     port: 3001, // Change if needed
-  },
+  }
 })
