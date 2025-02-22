@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 interface User {
@@ -30,20 +31,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password: string) => {
-    const res = await fetch('https://dummy-1.hiublue.com/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
 
-    if (!res.ok) throw new Error('Login failed');
+      const data = response.data;
+      setUser(data.user);
+      setToken(data.token);
 
-    const data = await res.json();
-    setUser(data.user);
-    setToken(data.token);
-
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw new Error('Login failed');
+    }
   };
 
   const logout = () => {

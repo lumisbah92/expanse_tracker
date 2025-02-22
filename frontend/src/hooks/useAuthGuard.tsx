@@ -10,7 +10,7 @@ export const useAuthGuard = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/sign-in');
+      navigate('/login');
     }
   }, [user, navigate]);
 };

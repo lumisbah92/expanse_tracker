@@ -5,6 +5,7 @@ import { config } from './config/config';
 import authRouter from './routes/authRoutes';
 import transactionRouter from './routes/transactionRoutes';
 import sequelize from './db/dbConfig';
+import { seedDummyTransactions } from './db/models/seedDummyTransactions';
 
 const app = express();
 
@@ -27,6 +28,7 @@ const syncDatabase = async () => {
 // Start the server
 const PORT = config.port || 5000;
 app.listen(PORT, async () => {
+  await seedDummyTransactions();
   await syncDatabase();
   console.log(`Server is running on port ${PORT}`);
 });

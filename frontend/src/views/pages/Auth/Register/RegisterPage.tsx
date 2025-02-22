@@ -1,5 +1,5 @@
 import CustomLayout from '../CustomLayout';
-import SignUpView from './SignUpView';
+import SignUpView from './RegisterView';
 
 const SignUpPage = () => {
   return (

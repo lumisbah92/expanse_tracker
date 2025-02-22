@@ -1,7 +1,7 @@
 import React from 'react';
 import { DashboardStatType } from './index';
-import BarChart from './bar-chart';
-import LineChart from './line-chart';
+import BarChart from './BarChart';
+import LineChart from './LineChart';
 
 interface DashboardStatProps {
   loadingStat: boolean;
@@ -30,8 +30,8 @@ const DashboardStat: React.FC<DashboardStatProps> = ({ loadingStat, errorStat, d
     <div className="flex-1 flex flex-col lg:flex-row gap-2">
       {dashboardStat && (
         <>
-          <BarChart websiteVisits={dashboardStat.website_visits} />
-          <LineChart offersSent={dashboardStat.offers_sent} />
+          <BarChart transaction_amounts={dashboardStat.transaction_amounts} />
+          <LineChart transaction_counts={dashboardStat.transaction_counts} />
         </>
       )}
     </div>

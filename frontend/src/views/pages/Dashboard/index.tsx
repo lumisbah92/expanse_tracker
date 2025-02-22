@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import SideBar from '../Sidebar';
 import Header from '../Header';
-import DashboardSummary from './dashboard-summary';
-import DashboardStat from './dashboard-stat';
-import OfferListTable from './offer-list';
+import DashboardSummary from './DashboardSummary';
+import DashboardStat from './DashboardStat';
 import svgIcons from '../../../services/svgService';
+import TransactionListTable from './TransactionList';
 
 export interface NavItem {
   label: string;
@@ -20,10 +20,10 @@ export type DashboardSummaryType = {
 };
 
 export interface DashboardStatType {
-  website_visits: {
-    [day: string]: { desktop: number; mobile: number };
+  transaction_amounts: {
+    [day: string]: { income: number; expense: number };
   };
-  offers_sent: {
+  transaction_counts: {
     [day: string]: number;
   };
 }
@@ -37,7 +37,7 @@ const DashboardView: React.FC = () => {
   const { user, logout } = useAuth();
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [dashboardSummary, setDashboardSummary] = useState<any>(null);
+  const [dashboardSummary, setDashboardSummary] = useState<DashboardSummaryType[] | null>(null);
   const [loadingSummary, setLoadingSummary] = useState(true);
   const [errorSummary, setErrorSummary] = useState<string | null>(null);
   const [dashboardStat, setDashboardStat] = useState<DashboardStatType | null>(null);
@@ -48,7 +48,7 @@ const DashboardView: React.FC = () => {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (!user && !storedToken) {
-      window.location.replace('/sign-in');
+      window.location.replace('/login');
     }
     setIsCheckingAuth(false);
   }, [user]);
@@ -58,12 +58,10 @@ const DashboardView: React.FC = () => {
     const fetchDashboardData = async () => {
       setLoadingSummary(true);
       try {
-        const response = await fetch(
-          'https://dummy-1.hiublue.com/api/dashboard/summary?filter=this-week',
-          {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-          }
-        );
+        const url = `${import.meta.env.VITE_API_URL}/transactions/summary`;
+        const response = await fetch(url, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
 
         if (!response.ok) {
           setErrorSummary('Failed to fetch dashboard summary');
@@ -87,12 +85,10 @@ const DashboardView: React.FC = () => {
     const fetchStats = async () => {
       setLoadingStat(true);
       try {
-        const response = await fetch(
-          'https://dummy-1.hiublue.com/api/dashboard/stat?filter=this-week',
-          {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-          }
-        );
+        const url = `${import.meta.env.VITE_API_URL}/transactions/stats`;
+        const response = await fetch(url, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        });
         if (!response.ok) {
           setErrorStat('Failed to fetch dashboard stats');
           return;
@@ -109,38 +105,6 @@ const DashboardView: React.FC = () => {
     fetchStats();
   }, []);
 
-  const cards = dashboardSummary
-    ? [
-        {
-          title: 'Total active users',
-          count: dashboardSummary.current.active_users / 1000, // convert to "k" format
-          percentage: Math.round(
-            ((dashboardSummary.current.active_users - dashboardSummary.previous.active_users) /
-              dashboardSummary.previous.active_users) *
-              100
-          ),
-        },
-        {
-          title: 'Total clicks',
-          count: dashboardSummary.current.clicks / 1000,
-          percentage: Math.round(
-            ((dashboardSummary.current.clicks - dashboardSummary.previous.clicks) /
-              dashboardSummary.previous.clicks) *
-              100
-          ),
-        },
-        {
-          title: 'Total appearances',
-          count: dashboardSummary.current.appearance / 1000,
-          percentage: Math.round(
-            ((dashboardSummary.current.appearance - dashboardSummary.previous.appearance) /
-              dashboardSummary.previous.appearance) *
-              100
-          ),
-        },
-      ]
-    : [];
-
   if (isCheckingAuth) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -156,9 +120,9 @@ const DashboardView: React.FC = () => {
         <Header dropdownOpen={dropdownOpen} setDropdownOpen={setDropdownOpen} logout={logout} />
         <div className="w-full h-full flex-1 overflow-x-hidden overflow-y-auto p-2 flex flex-col gap-2">
           <h1 className="text-2xl text-gray-900">Dashboard</h1>
-          <DashboardSummary loadingSummary={loadingSummary} errorSummary={errorSummary} cards={cards} />
+          <DashboardSummary loadingSummary={loadingSummary} errorSummary={errorSummary} cards={dashboardSummary} />
           <DashboardStat loadingStat={loadingStat} errorStat={errorStat} dashboardStat={dashboardStat} />
-          <OfferListTable />
+          <TransactionListTable/>
         </div>
       </div>
     </div>

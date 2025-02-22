@@ -1,56 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import svgIcons from '../../../services/svgService';
 
-interface Offer {
+interface Transaction {
   id: number;
-  user_name: string;
-  email: string;
-  phone: string;
-  company: string;
-  jobTitle: string;
-  status: 'accepted' | 'rejected' | 'pending';
-  type: string;
-  price: number;
+  amount: number;
+  date: string; // ISO date string
+  category: string;
+  description: string;
+  paymentMethod: string;
+  type: string; // e.g., 'income' or 'expense'
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// Return inline styles for status badge colors
-function getStatusColor(status: Offer['status']): React.CSSProperties {
-  switch (status) {
-    case 'accepted':
-      return { backgroundColor: '#22C55E29', color: '#118D57' };
-    case 'rejected':
-      return { backgroundColor: '#FF563029', color: '#B71D18' };
-    case 'pending':
-      return { backgroundColor: '#FFAB0029', color: '#B76E00' };
-    default:
-      return { backgroundColor: '#d1d5db', color: '#374151' };
-  }
+interface TransactionData {
+  transactions: Transaction[];
+  totalTransaction: number;
 }
 
-const OfferListTable: React.FC = () => {
-  const [tabValue, setTabValue] = useState(0);
+const TransactionListTable: React.FC = () => {
+  const [tabValue, setTabValue] = useState(0); // 0 = All, 1 = Expense, 2 = Income
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [offers, setOffers] = useState<Offer[]>([]);
-  const [totalOffers, setTotalOffers] = useState<number>(0);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [totalTransactions, setTotalTransactions] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchOffers = async () => {
+    const fetchTransactions = async () => {
       setLoading(true);
       try {
-        const url = new URL('https://dummy-1.hiublue.com/api/offers');
+        const url = new URL(`${import.meta.env.VITE_API_URL}/transactions`);
         url.searchParams.append('page', (page + 1).toString());
-        url.searchParams.append('per_page', rowsPerPage.toString());
-
-        // Append filtering parameters
-        if (tabValue === 1) url.searchParams.append('status', 'accepted');
+        url.searchParams.append('perPage', rowsPerPage.toString());
         if (searchQuery) url.searchParams.append('search', searchQuery);
-        if (selectedType) url.searchParams.append('type', selectedType);
+        if (selectedCategory) url.searchParams.append('category', selectedCategory);
+        if (tabValue === 1) url.searchParams.append('type', 'expense');
+        if (tabValue === 2) url.searchParams.append('type', 'income');
 
         const response = await fetch(url.toString(), {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -60,9 +51,10 @@ const OfferListTable: React.FC = () => {
           setError(errorData.message);
           return;
         }
-        const data = await response.json();
-        setOffers(data.data);
-        setTotalOffers(data.meta.total);
+
+        const data: TransactionData = await response.json();
+        setTransactions(data.transactions);
+        setTotalTransactions(data.totalTransaction); // Note: if the API is paginated, you may need a separate total count
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -70,17 +62,17 @@ const OfferListTable: React.FC = () => {
       }
     };
 
-    fetchOffers();
-  }, [page, rowsPerPage, tabValue, searchQuery, selectedType]);
+    fetchTransactions();
+  }, [page, rowsPerPage, tabValue, searchQuery, selectedCategory]);
 
   const rowsPerPageOptions = [5, 10, 25, 50, 100];
-  const totalPages = Math.ceil(totalOffers / rowsPerPage);
+  const totalPages = Math.ceil(totalTransactions / rowsPerPage);
 
   return (
     <div className="w-full rounded border border-gray-200">
       {/* Header */}
       <div className="px-2 lg:px-3 border-b border-gray-300">
-        <h2 className="text-lg font-semibold text-gray-900">Offer List</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Transaction List</h2>
       </div>
 
       <div className="p-0">
@@ -89,17 +81,27 @@ const OfferListTable: React.FC = () => {
           <div className="flex space-x-4">
             <button
               onClick={() => setTabValue(0)}
-              className={`py-2 text-sm ${tabValue === 0 ? 'border-b-2 border-gray-900 font-semibold' : 'text-gray-600'
-                }`}
+              className={`py-2 text-sm ${
+                tabValue === 0 ? 'border-b-2 border-gray-900 font-semibold' : 'text-gray-600'
+              }`}
             >
               All
             </button>
             <button
               onClick={() => setTabValue(1)}
-              className={`py-2 text-sm ${tabValue === 1 ? 'border-b-2 border-gray-900 font-semibold' : 'text-gray-600'
-                }`}
+              className={`py-2 text-sm ${
+                tabValue === 1 ? 'border-b-2 border-gray-900 font-semibold' : 'text-gray-600'
+              }`}
             >
-              Accepted
+              Expense
+            </button>
+            <button
+              onClick={() => setTabValue(2)}
+              className={`py-2 text-sm ${
+                tabValue === 2 ? 'border-b-2 border-gray-900 font-semibold' : 'text-gray-600'
+              }`}
+            >
+              Income
             </button>
           </div>
         </div>
@@ -107,7 +109,10 @@ const OfferListTable: React.FC = () => {
         {/* Search and Filter */}
         <div className="flex flex-wrap items-center gap-2 px-1 lg:px-3 py-2">
           <div className="relative w-full lg:w-[505px]">
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2" dangerouslySetInnerHTML={{ __html: svgIcons.search_icon }} />
+            <div
+              className="absolute left-3 top-1/2 transform -translate-y-1/2"
+              dangerouslySetInnerHTML={{ __html: svgIcons.search_icon }}
+            />
             <input
               type="text"
               placeholder="Search..."
@@ -118,23 +123,22 @@ const OfferListTable: React.FC = () => {
           </div>
           <div className="w-full lg:w-[200px]">
             <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full border rounded p-2 text-sm"
             >
               <option value="">All</option>
-              <option value="Monthly">Monthly</option>
-              <option value="Yearly">Yearly</option>
-              <option value="Pay As You Go">Pay As You Go</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Utilities">Utilities</option>
+              {/* Add more categories as needed */}
             </select>
           </div>
         </div>
 
         {/* Loading, Error, or Table */}
         {loading ? (
-          <div className="flex justify-center items-center h-[200px]">
-            Loading...
-          </div>
+          <div className="flex justify-center items-center h-[200px]">Loading...</div>
         ) : error ? (
           <p className="text-red-600 text-center py-4">{error}</p>
         ) : (
@@ -143,48 +147,40 @@ const OfferListTable: React.FC = () => {
               <table className="w-full min-w-max">
                 <thead>
                   <tr>
-                    <th className="px-2 lg:px-4 py-2 text-left">Name</th>
-                    <th className="hidden lg:table-cell px-2 lg:px-4 py-2 text-left">Phone number</th>
-                    <th className="hidden lg:table-cell px-2 lg:px-4 py-2 text-left">Company</th>
-                    <th className="hidden lg:table-cell px-2 lg:px-4 py-2 text-left">Job Title</th>
-                    <th className="hidden sm:table-cell px-2 lg:px-4 py-2 text-left">Type</th>
-                    <th className="px-2 lg:px-4 py-2 text-left">Status</th>
+                    <th className="px-2 lg:px-4 py-2 text-left">Date</th>
+                    <th className="px-2 lg:px-4 py-2 text-left">Category</th>
+                    <th className="px-2 lg:px-4 py-2 text-left">Description</th>
+                    <th className="hidden lg:table-cell px-2 lg:px-4 py-2 text-left">Payment Method</th>
+                    <th className="px-2 lg:px-4 py-2 text-left">Amount</th>
+                    <th className="px-2 lg:px-4 py-2 text-left">Type</th>
                     <th className="px-2 lg:px-4 py-2"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {offers.map((offer) => (
-                    <tr key={offer.id} className="border-t border-gray-200">
+                  {transactions.map((transaction) => (
+                    <tr key={transaction.id} className="border-t border-gray-200">
                       <td className="px-2 lg:px-4 py-2">
-                        <div className="flex flex-col">
-                          <span className="text-sm text-gray-900">{offer.user_name}</span>
-                          <span className="text-sm text-gray-500">{offer.email}</span>
-                        </div>
+                        <span className="text-sm text-gray-900">
+                          {new Date(transaction.date).toLocaleDateString()}
+                        </span>
+                      </td>
+                      <td className="px-2 lg:px-4 py-2">
+                        <span className="text-sm text-gray-900">{transaction.category}</span>
+                      </td>
+                      <td className="px-2 lg:px-4 py-2">
+                        <span className="text-sm text-gray-900">{transaction.description}</span>
                       </td>
                       <td className="hidden lg:table-cell px-2 lg:px-4 py-2">
-                        <span className="text-sm text-gray-900">{offer.phone}</span>
+                        <span className="text-sm text-gray-900">{transaction.paymentMethod}</span>
                       </td>
-                      <td className="hidden lg:table-cell px-2 lg:px-4 py-2">
-                        <span className="text-sm text-gray-900">{offer.company}</span>
+                      <td className="px-2 lg:px-4 py-2">
+                        <span className="text-sm text-gray-900">${transaction.amount.toFixed(2)}</span>
                       </td>
-                      <td className="hidden lg:table-cell px-2 lg:px-4 py-2">
-                        <span className="text-sm text-gray-900">{offer.jobTitle}</span>
+                      <td className="px-2 lg:px-4 py-2">
+                        <span className="text-sm text-gray-900 capitalize">{transaction.type}</span>
                       </td>
-                      <td className="hidden sm:table-cell px-2 lg:px-4 py-2 w-[100px]">
-                        <span className="text-sm text-gray-900 capitalize">{offer.type}</span>
-                      </td>
-                      <td className="px-2 lg:px-4 py-2 w-[100px]">
-                        <div
-                          style={getStatusColor(offer.status)}
-                          className="inline-block px-1 py-0.5 rounded"
-                        >
-                          <span className="font-bold text-[12px] leading-5 capitalize">
-                            {offer.status}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-2 lg:px-4 py-2 w-[50px] text-right">
-                        <div className="flex items-end justify-end space-x-1">
+                      <td className="px-2 lg:px-4 py-2 text-right">
+                        <div className="flex items-center justify-end space-x-1">
                           <button className="p-1 hover:bg-gray-200 rounded">
                             <div dangerouslySetInnerHTML={{ __html: svgIcons.edit_icon }} />
                           </button>
@@ -195,10 +191,10 @@ const OfferListTable: React.FC = () => {
                       </td>
                     </tr>
                   ))}
-                  {offers.length === 0 && (
+                  {transactions.length === 0 && (
                     <tr>
                       <td colSpan={7} className="text-center py-4">
-                        No offers found.
+                        No transactions found.
                       </td>
                     </tr>
                   )}
@@ -251,4 +247,5 @@ const OfferListTable: React.FC = () => {
   );
 };
 
-export default OfferListTable;
+export default TransactionListTable;
+

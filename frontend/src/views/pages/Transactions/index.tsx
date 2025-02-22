@@ -24,7 +24,7 @@ const Transactions: React.FC = () => {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (!user && !storedToken) {
-      window.location.replace('/sign-in');
+      window.location.replace('/login');
     }
     setIsCheckingAuth(false);
   }, [user]);

@@ -8,13 +8,13 @@ const SignUpView = () => {
   const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
   const navigate = useNavigate();
 
-  const handleSignUpClick = async (data: any) => {
+  const handleRegisterClick = async (data: any) => {
     try {
       console.log('Input Data:', data);
       const apiUrl = import.meta.env.VITE_API_URL;
       const response = await axios.post(`${apiUrl}/auth/register`, data);
       console.log('Response:', response.data);
-      navigate('/sign-in');
+      navigate('/login');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -45,22 +45,22 @@ const SignUpView = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <span className="text-[28px] font-semibold mb-4 leading-[36.4px] tracking-wide text-textColor">Sign Up</span>
+      <span className="text-[28px] font-semibold mb-4 leading-[36.4px] tracking-wide text-textColor">Register</span>
 
       <FormRC
         formClassName="text-left min-w-full"
         fields={fields}
-        onSubmit={handleSignUpClick}
-        submitLabel="Sign Up"
+        onSubmit={handleRegisterClick}
+        submitLabel="Register"
       />
 
       <div className="flex space-x-1 items-center justify-center mt-4">
         <span className="text-[14px] font-normal leading-[20.23px] tracking-wide text-textColor">Have any account?</span>
         <Link
-          to="/sign-in"
+          to="/login"
           className="text-[14px] font-bold leading-[20.23px] tracking-wide text-primaryColor underline"
         >
-          Sign In
+          Login
         </Link>
       </div>
     </div>

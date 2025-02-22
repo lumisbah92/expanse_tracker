@@ -6,8 +6,8 @@ import Loadable from '../Components/loader/Loadable';
 
 const Dashboard = Loadable(lazy(() => import('../views/pages/Dashboard')));
 const Transactions = Loadable(lazy(() => import('../views/pages/Transactions')));
-const Login = Loadable(lazy(() => import('../views/pages/Auth/SignIn/SignInPage')));
-const Register = Loadable(lazy(() => import('../views/pages/Auth/SignUp/SignUpPage')));
+const Login = Loadable(lazy(() => import('../views/pages/Auth/Login/LoginPage')));
+const Register = Loadable(lazy(() => import('../views/pages/Auth/Register/RegisterPage')));
 
 
 // ==============================|| AUTH ROUTES ||============================== //
@@ -28,11 +28,11 @@ const LoginRoutes = {
           element: <Transactions />
         },
         {
-          path: '/sign-in',
+          path: '/login',
           element: <Login />
         },
         {
-          path: '/sign-up',
+          path: '/register',
           element: <Register />
         },
       ],

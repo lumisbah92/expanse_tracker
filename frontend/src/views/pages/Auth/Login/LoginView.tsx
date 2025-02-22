@@ -2,20 +2,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import usePasswordVisibility from '../../../../utils/usePasswordVisibility';
 import { Eye, EyeSlash } from 'iconsax-react';
 import FormRC from '../../../../Components/form/FormRC';
-import axios from 'axios';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { useState } from 'react';
 
-const SignInView = () => {
+const LoginView = () => {
+  const { login } = useAuth();
   const { isPasswordVisible, togglePasswordVisibility } = usePasswordVisibility();
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSignInClick = async (data: any) => {
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.post(`${apiUrl}/auth/login`, data);
+  const handleLoginClick = async ( data: any) => {
+    setError('');
 
-      const token = response.data.token;
-      localStorage.setItem('token', token);
-      navigate('/dashboard');
+    try {
+      await login(data.email, data.password);
+      navigate('/');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -41,13 +42,14 @@ const SignInView = () => {
 
   return (
     <>
-      <span className="text-[28px] font-semibold mb-4 leading-[36.4px] tracking-wide text-[#2C3E50]">Sign In</span>
+      <span className="text-[28px] font-semibold mb-4 leading-[36.4px] tracking-wide text-[#2C3E50]">Login</span>
+      {error && <span className="text-red-500">{error}</span>}
 
       {/* Use FormRC to render the form */}
       <FormRC
         fields={fields}
-        onSubmit={handleSignInClick} // Pass the submit handler to FormRC
-        submitLabel="Sign In"
+        onSubmit={handleLoginClick} // Pass the submit handler to FormRC
+        submitLabel="Login"
       />
 
       {/* Remember Me and Forgot Password Section */}
@@ -69,14 +71,14 @@ const SignInView = () => {
       <div className="flex space-x-1 items-center justify-center mt-4">
         <span className="text-[14px] font-normal leading-[20.23px] tracking-wide text-[#2C3E50]">Don’t have an account?</span>
         <Link
-          to="/sign-up"
+          to="/register"
           className="text-[14px] font-bold leading-[20.23px] tracking-wide text-[#3498DB] underline"
         >
-          Sign Up
+          Register
         </Link>
       </div>
     </>
   );
 };
 
-export default SignInView;
+export default LoginView;
