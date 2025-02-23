@@ -5,7 +5,7 @@ import { config } from './config/config';
 import authRouter from './routes/authRoutes';
 import transactionRouter from './routes/transactionRoutes';
 import sequelize from './db/dbConfig';
-import { seedDummyTransactions } from './db/models/seedDummyTransactions';
+import { seedDummyTransactions } from './db/seedDummyTransactions';
 
 const app = express();
 

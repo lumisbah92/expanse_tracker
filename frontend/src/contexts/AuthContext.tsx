@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
 interface User {
@@ -33,15 +32,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     try {
       const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
 
-      const data = response.data;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Login failed 1');
+      }
+
+      const data = await response.json();
       setUser(data.user);
       setToken(data.token);
 
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login failed:', error);
       throw new Error('Login failed');
     }
@@ -66,4 +76,3 @@ export const useAuth = () => {
   if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 };
-

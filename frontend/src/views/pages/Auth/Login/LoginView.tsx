@@ -17,7 +17,9 @@ const LoginView = () => {
     try {
       await login(data.email, data.password);
       navigate('/');
-    } catch (error) {
+    } catch (error: any) {
+      setError("Invalid email or password");
+      setTimeout(() => setError(''), 1000);
       console.error('Error:', error);
     }
   };
@@ -43,7 +45,7 @@ const LoginView = () => {
   return (
     <>
       <span className="text-[28px] font-semibold mb-4 leading-[36.4px] tracking-wide text-[#2C3E50]">Login</span>
-      {error && <span className="text-red-500">{error}</span>}
+      {error && <span className="block text-red-500 mb-4 mt-4">{error}</span>}
 
       {/* Use FormRC to render the form */}
       <FormRC

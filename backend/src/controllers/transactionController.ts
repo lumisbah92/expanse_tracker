@@ -127,7 +127,7 @@ export const getTransactionSummary = async (req: Request, res: Response) => {
       if (previous === 0) {
         return current > 0 ? 100 : 0;
       }
-      return ((current - previous) / previous) * 100;
+      return parseFloat((((current - previous) / previous) * 100).toFixed(2));
     };
 
     const incomePercentage = calculatePercentage(currentIncome, previousIncome);
