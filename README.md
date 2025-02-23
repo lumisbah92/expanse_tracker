@@ -80,6 +80,13 @@ The project is divided into two main parts:
   npm run start
 ```
 
+## User Credential
+For better visualization of the data, you can use the following credential:
+```bash
+dummy@example.com
+dummyPassword
+```
+
 ## Contact
 For any questions or issues, feel free to reach out at [lumisbah92@gmail.com](mailto:lumisbah92@gmail.com).
 
