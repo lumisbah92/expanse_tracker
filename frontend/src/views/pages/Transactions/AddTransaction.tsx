@@ -104,7 +104,7 @@ const AddTransaction: React.FC = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 max-w-3xl w-full mx-auto p-4 bg-white rounded-[10px] shadow">
       <div className="border-b border-gray-300 pb-2">
-        <h2 className="text-xl font-semibold">Add Transaction</h2>
+        <h2 className="text-lg md:text-xl font-semibold">Add Transaction</h2>
         <p className="text-sm text-gray-500">Enter transaction details below</p>
       </div>
 

@@ -50,7 +50,7 @@ const BarChart: FC<BarChartProps> = ({ transaction_amounts }) => {
     <div className="flex-1">
       <div className="bg-white shadow rounded-[10px]">
         <div className="p-2 md:p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Transaction amounts</h3>
+          <h3 className="md:text-lg font-semibold text-gray-900 mb-4">Transaction amounts</h3>
           <ReactApexChart type="bar" series={series} options={options} />
         </div>
       </div>

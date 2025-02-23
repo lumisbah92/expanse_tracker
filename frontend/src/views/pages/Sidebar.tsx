@@ -18,7 +18,7 @@ const SideBar: React.FC<SideBarProps> = ({ navItems }) => {
     <div className="hidden md:flex flex-col w-full h-full border-r border-gray-200 p-2 max-w-[180px] lg:max-w-[280px]">
       <div className="sticky top-0 z-10">
         <div className="h-16 flex items-center pl-2">
-          <div className="text-[24px] font-semibold leading-[31.47px] tracking-wide text-[#243642]">Expense<span className='text-primaryColor'>Tracker</span></div>
+          <div className="text-[22px] font-semibold leading-[31.47px] tracking-wide text-[#243642]">Expense<span className='text-primaryColor'>Tracker</span></div>
         </div>
         <ul>
           <p className="text-gray-500 p-2 pt-7 text-sm font-medium">Overview</p>

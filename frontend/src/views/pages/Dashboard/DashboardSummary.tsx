@@ -33,7 +33,7 @@ const DashboardSummary: React.FC<DashboardSummaryProps> = ({ loadingSummary, err
           className="flex flex-col justify-between h-[148px] flex-1 bg-white rounded-[10px] shadow transition-transform duration-300 hover:scale-105 hover:shadow-lg p-2 md:p-6"
         >
           <p className="text-sm font-semibold text-gray-900">{card.title}</p>
-          <h3 className="text-3xl font-bold text-gray-900">{card.count}k</h3>
+          <h3 className="text-xl md:text-3xl font-bold text-gray-900">{card.count}k</h3>
           <div className="flex items-center gap-1">
             <div dangerouslySetInnerHTML={{ __html: card.percentage < 0 ? svgIcons.arrow_down : svgIcons.arrow_up }} />
             <p className="text-sm font-semibold text-gray-900">{Math.abs(card.percentage)}%</p>

@@ -119,10 +119,10 @@ const DashboardView: React.FC = () => {
       <div className="h-full flex flex-col gap-2 flex-1">
         <Header dropdownOpen={dropdownOpen} setDropdownOpen={setDropdownOpen} logout={logout} />
         <div className="w-full h-full flex-1 overflow-x-hidden overflow-y-auto p-2 lg:p-4 flex flex-col gap-5">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <h1 className="md:text-2xl font-bold text-gray-900">Dashboard</h1>
           <DashboardSummary loadingSummary={loadingSummary} errorSummary={errorSummary} cards={dashboardSummary} />
           <DashboardStat loadingStat={loadingStat} errorStat={errorStat} dashboardStat={dashboardStat} />
-          <TransactionListTable/>
+          {/* <TransactionListTable/> */}
         </div>
       </div>
     </div>
