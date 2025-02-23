@@ -6,6 +6,7 @@ import Loadable from '../Components/loader/Loadable';
 
 const Dashboard = Loadable(lazy(() => import('../views/pages/Dashboard')));
 const AddTransaction = Loadable(lazy(() => import('../views/pages/Transactions')));
+const ResetPassword = Loadable(lazy(() => import('../views/pages/Auth/ResetPassword/ResetPasswordPage')));
 const Login = Loadable(lazy(() => import('../views/pages/Auth/Login/LoginPage')));
 const Register = Loadable(lazy(() => import('../views/pages/Auth/Register/RegisterPage')));
 
@@ -26,6 +27,10 @@ const LoginRoutes = {
         {
           path: '/add-transaction',
           element: <AddTransaction />
+        },
+        {
+          path: '/reset-password',
+          element: <ResetPassword />
         },
         {
           path: '/login',

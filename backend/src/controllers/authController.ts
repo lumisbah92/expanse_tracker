@@ -38,3 +38,22 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+  const { email, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await user.update({ password: hashedPassword });
+
+    res.json({ message: 'Password reset successfully' });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+

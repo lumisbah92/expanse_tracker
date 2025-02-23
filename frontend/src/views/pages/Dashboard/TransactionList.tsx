@@ -186,7 +186,7 @@ const TransactionListTable: React.FC = () => {
               id="category"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full h-[54px] border rounded-[8px] px-2 text-sm"
+              className="w-full lg:w-[200px] h-[54px] border rounded-[8px] px-2 text-sm"
             >
               <option value="">All</option>
               <option value="Food">Food</option>
@@ -203,50 +203,48 @@ const TransactionListTable: React.FC = () => {
           <p className="text-red-600 text-center py-4">{error}</p>
         ) : (
           <>
-            <div className="overflow-x-auto w-full">
+            <div className="overflowhidden w-full">
               <table className="w-full min-w-max">
                 <thead className="bg-gray-200">
                   <tr>
-                    <th className="px-2 lg:px-4 py-2 text-left">Date</th>
-                    <th className="px-2 lg:px-4 py-2 text-left">Category</th>
-                    <th className="px-2 lg:px-4 py-2 text-left">Description</th>
-                    <th className="hidden lg:table-cell px-2 lg:px-4 py-2 text-left">
-                      Payment Method
-                    </th>
-                    <th className="px-2 lg:px-4 py-2 text-left">Amount</th>
-                    <th className="px-2 lg:px-4 py-2 text-left">Type</th>
-                    <th className="px-2 lg:px-4 py-2"></th>
+                    <th className="pl-2 lg:pl-4 text-left w-[100px] xl:w-auto">Date</th>
+                    <th className="hidden sm:table-cell text-left w-[100px] xl:w-auto">Category</th>
+                    <th className="hidden lg:table-cell text-left">Description</th>
+                    <th className="hidden lg:table-cell text-left">Payment Method</th>
+                    <th className="text-left w-[100px] xl:w-auto">Amount</th>
+                    <th className="hidden sm:table-cell text-left w-[100px] xl:w-auto">Type</th>
+                    <th className="pr-2 lg:pr-4 w-[80px] lg:w-auto"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {transactions.map((transaction) => (
                     <tr key={transaction.id} className="border-t border-gray-200">
-                      <td className="px-2 lg:px-4 py-2">
+                      <td className="pl-2 lg:pl-4 w-[100px] xl:w-auto">
                         <span className="text-sm font-medium text-gray-600">
                           {new Date(transaction.date).toLocaleDateString()}
                         </span>
                       </td>
-                      <td className="px-2 lg:px-4 py-2">
+                      <td className="hidden sm:table-cell w-[100px] xl:w-auto">
                         <span className="text-sm font-medium text-gray-600">{transaction.category}</span>
                       </td>
-                      <td className="px-2 lg:px-4 py-2">
+                      <td className="hidden lg:table-cell">
                         <span className="text-sm font-medium text-gray-600">{transaction.description}</span>
                       </td>
-                      <td className="hidden lg:table-cell px-2 lg:px-4 py-2">
+                      <td className="hidden lg:table-cell">
                         <span className="text-sm font-medium text-gray-600">{transaction.paymentMethod}</span>
                       </td>
-                      <td className="px-2 lg:px-4 py-2">
+                      <td className="w-[100px] xl:w-auto">
                         <span className="text-sm font-medium text-gray-600">
                           ${transaction.amount.toFixed(2)}
                         </span>
                       </td>
-                      <td className="px-2 lg:px-4 py-2">
+                      <td className="hidden sm:table-cell w-[100px] xl:w-auto">
                         <span className="text-sm font-medium text-gray-600 capitalize">
                           {transaction.type}
                         </span>
                       </td>
-                      <td className="px-2 lg:px-4 py-2 text-right">
-                        <div className="flex items-center justify-end gap-5">
+                      <td className="pr-2 lg:pr-4 text-right w-[80px] lg:w-auto">
+                        <div className="flex items-center justify-end gap-2 lg:gap-5">
                           <button className="p-2 hover:bg-gray-200 rounded-[8px]" onClick={() => setEditingTransaction(transaction)}>
                             <div dangerouslySetInnerHTML={{ __html: svgIcons.edit_icon }} />
                           </button>

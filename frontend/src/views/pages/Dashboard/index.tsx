@@ -114,7 +114,7 @@ const DashboardView: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       <SideBar navItems={navItems} />
       <div className="h-full flex flex-col gap-2 flex-1">
         <Header dropdownOpen={dropdownOpen} setDropdownOpen={setDropdownOpen} logout={logout} />
@@ -122,7 +122,7 @@ const DashboardView: React.FC = () => {
           <h1 className="md:text-2xl font-bold text-gray-900">Dashboard</h1>
           <DashboardSummary loadingSummary={loadingSummary} errorSummary={errorSummary} cards={dashboardSummary} />
           <DashboardStat loadingStat={loadingStat} errorStat={errorStat} dashboardStat={dashboardStat} />
-          {/* <TransactionListTable/> */}
+          <TransactionListTable/>
         </div>
       </div>
     </div>

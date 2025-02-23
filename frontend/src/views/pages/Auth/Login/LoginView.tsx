@@ -61,7 +61,7 @@ const LoginView = () => {
           </span>
         </label>
         <Link
-          to="/reset-password-method"
+          to="/reset-password"
           className="text-sm font-normal leading-5 tracking-wide text-textColor hover:underline"
         >
           Forgot Password?
