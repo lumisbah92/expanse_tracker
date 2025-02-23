@@ -5,7 +5,7 @@ import AuthLayout from '../views/layouts/AuthLayout';
 import Loadable from '../Components/loader/Loadable';
 
 const Dashboard = Loadable(lazy(() => import('../views/pages/Dashboard')));
-const Transactions = Loadable(lazy(() => import('../views/pages/Transactions')));
+const AddTransaction = Loadable(lazy(() => import('../views/pages/Transactions')));
 const Login = Loadable(lazy(() => import('../views/pages/Auth/Login/LoginPage')));
 const Register = Loadable(lazy(() => import('../views/pages/Auth/Register/RegisterPage')));
 
@@ -24,8 +24,8 @@ const LoginRoutes = {
           element: <Dashboard />
         },
         {
-          path: '/transactions',
-          element: <Transactions />
+          path: '/add-transaction',
+          element: <AddTransaction />
         },
         {
           path: '/login',

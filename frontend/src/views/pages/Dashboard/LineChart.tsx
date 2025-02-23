@@ -30,9 +30,9 @@ const LineChart: FC<LineChartProps> = ({ transaction_counts }) => {
 
   return (
     <div className="flex-1 w-full">
-      <div className="bg-white shadow rounded w-full">
+      <div className="bg-white shadow rounded-[10px] w-full">
         <div className="p-2 md:p-6">
-          <h3 className="text-lg text-gray-900 mb-4">Transaction counts</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Transaction counts</h3>
           <ReactApexChart options={options} series={series} type="line" />
         </div>
       </div>

@@ -13,7 +13,7 @@ export interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Dashboard', path: '/', icon: svgIcons.dashboard },
-  { label: 'Transactions', path: '/transactions', icon:  svgIcons.transactions },
+  { label: 'Add Transaction', path: '/add-transaction', icon:  svgIcons.transactions },
 ];
 
 const Transactions: React.FC = () => {
@@ -38,11 +38,11 @@ const Transactions: React.FC = () => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <SideBar navItems={navItems} />
-      <div className="flex flex-col flex-1">
+      <div className="h-full flex flex-col flex-1">
         <Header dropdownOpen={dropdownOpen} setDropdownOpen={setDropdownOpen} logout={logout} />
-        <div className="flex flex-col items-center flex-1 px-2 py-5">
+        <div className="h-full flex flex-col items-center flex-1 px-2 py-8">
           <AddTransaction />
         </div>
       </div>

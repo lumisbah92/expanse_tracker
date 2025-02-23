@@ -102,26 +102,19 @@ const AddTransaction: React.FC = () => {
   }, [transactionSent, reset]);
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 max-w-3xl w-full mx-auto p-4 bg-white rounded shadow"
-    >
-      {/* Header */}
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 max-w-3xl w-full mx-auto p-4 bg-white rounded-[10px] shadow">
       <div className="border-b border-gray-300 pb-2">
         <h2 className="text-xl font-semibold">Add Transaction</h2>
-        <p className="text-sm text-gray-500">
-          Enter transaction details below
-        </p>
+        <p className="text-sm text-gray-500">Enter transaction details below</p>
       </div>
 
-      {/* Transaction Type (Radio Buttons) */}
       <div>
         <label className="block text-sm font-medium text-gray-900">Transaction Type</label>
         <Controller
           name="type"
           control={control}
           render={({ field }) => (
-            <div className="flex space-x-4 mt-1">
+            <div className="flex space-x-4 mt-2">
               <label className="flex items-center space-x-2">
                 <input
                   type="radio"
@@ -132,7 +125,7 @@ const AddTransaction: React.FC = () => {
                 />
                 <span>Income</span>
               </label>
-              <label className="flex items-center space-x-2">
+              <label className="flex items-center gap-2">
                 <input
                   type="radio"
                   value="expense"
@@ -148,10 +141,9 @@ const AddTransaction: React.FC = () => {
         {errors.type && <p className="text-red-600 text-sm">{errors.type.message}</p>}
       </div>
 
-      {/* Category (Checkboxes) */}
       <div>
         <label className="block text-sm font-medium text-gray-900">Category</label>
-        <div className="flex space-x-4 mt-1">
+        <div className="flex space-x-4 mt-2">
           {['Food', 'Transport', 'Utilities'].map((option) => (
             <Controller
               key={option}
@@ -187,27 +179,24 @@ const AddTransaction: React.FC = () => {
         )}
       </div>
 
-      {/* Amount */}
       <div>
         <label className="block text-sm font-medium text-gray-900">Amount</label>
         <input
           type="number"
           placeholder="$ Amount"
           {...register('amount', { valueAsNumber: true })}
-          className="w-full border rounded p-2"
+          className="w-full border rounded-[8px] p-2 mt-2"
         />
         {errors.amount && <p className="text-red-600 text-sm">{errors.amount.message}</p>}
       </div>
 
-      {/* Date */}
       <div>
         <label className="block text-sm font-medium text-gray-900">Date</label>
         <Controller
           name="date"
           control={control}
           render={({ field }) => {
-            const dateStr =
-              field.value instanceof Date ? field.value.toISOString().slice(0, 10) : '';
+            const dateStr = field.value instanceof Date ? field.value.toISOString().slice(0, 10) : '';
             return (
               <input
                 type="date"
@@ -216,7 +205,7 @@ const AddTransaction: React.FC = () => {
                   const newDate = new Date(e.target.value);
                   field.onChange(newDate);
                 }}
-                className="w-full border rounded p-2"
+                className="w-full border rounded-[8px] p-2 mt-2"
               />
             );
           }}
@@ -224,36 +213,32 @@ const AddTransaction: React.FC = () => {
         {errors.date && <p className="text-red-600 text-sm">{errors.date.message}</p>}
       </div>
 
-      {/* Description */}
       <div>
         <label className="block text-sm font-medium text-gray-900">Description</label>
         <input
           type="text"
           placeholder="Description (optional)"
           {...register('description')}
-          className="w-full border rounded p-2"
+          className="w-full border rounded-[8px] p-2 mt-2"
         />
       </div>
 
-      {/* Payment Method */}
       <div>
         <label className="block text-sm font-medium text-gray-900">Payment Method</label>
         <input
           type="text"
           placeholder="Payment Method (optional)"
           {...register('paymentMethod')}
-          className="w-full border rounded p-2"
+          className="w-full border rounded-[8px] p-2 mt-2"
         />
       </div>
 
-      {/* Submit Button */}
       <div className="flex justify-end">
-        <button type="submit" className="w-32 h-12 bg-gray-900 text-white rounded">
+        <button type="submit" className="w-36 h-12 bg-gray-900 text-white rounded-[8px] transition duration-300 ease-in-out hover:scale-105">
           {transactionSent ? 'Transaction Sent' : 'Add Transaction'}
         </button>
       </div>
 
-      {/* Snackbar/Notification */}
       {transactionSent && (
         <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white py-2 px-4 rounded">
           Transaction added successfully

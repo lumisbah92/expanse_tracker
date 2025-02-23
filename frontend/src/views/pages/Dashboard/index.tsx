@@ -30,7 +30,7 @@ export interface DashboardStatType {
 
 const navItems: NavItem[] = [
   { label: 'Dashboard', path: '/', icon: svgIcons.dashboard },
-  { label: 'Transactions', path: '/transactions', icon:  svgIcons.transactions },
+  { label: 'Add Transaction', path: '/add-transaction', icon:  svgIcons.transactions },
 ];
 
 const DashboardView: React.FC = () => {
@@ -114,12 +114,12 @@ const DashboardView: React.FC = () => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <SideBar navItems={navItems} />
-      <div className="flex flex-col flex-1">
+      <div className="h-full flex flex-col gap-2 flex-1">
         <Header dropdownOpen={dropdownOpen} setDropdownOpen={setDropdownOpen} logout={logout} />
-        <div className="w-full h-full flex-1 overflow-x-hidden overflow-y-auto p-2 flex flex-col gap-2">
-          <h1 className="text-2xl text-gray-900">Dashboard</h1>
+        <div className="w-full h-full flex-1 overflow-x-hidden overflow-y-auto p-2 lg:p-4 flex flex-col gap-5">
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <DashboardSummary loadingSummary={loadingSummary} errorSummary={errorSummary} cards={dashboardSummary} />
           <DashboardStat loadingStat={loadingStat} errorStat={errorStat} dashboardStat={dashboardStat} />
           <TransactionListTable/>

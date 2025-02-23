@@ -27,7 +27,7 @@ const DashboardStat: React.FC<DashboardStatProps> = ({ loadingStat, errorStat, d
   }
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row gap-2">
+    <div className="flex-1 flex flex-col lg:flex-row gap-5">
       {dashboardStat && (
         <>
           <BarChart transaction_amounts={dashboardStat.transaction_amounts} />

@@ -40,16 +40,17 @@ const BarChart: FC<BarChartProps> = ({ transaction_amounts }) => {
       position: 'top',
       horizontalAlign: 'right',
       markers: { shape: 'circle' },
-      labels: { colors: 'text.primary' },
+      labels: { colors: '#243642' },
+      fontWeight: 600
     },
     grid: { borderColor: '#E0E0E0', strokeDashArray: 4 },
   };
 
   return (
     <div className="flex-1">
-      <div className="bg-white shadow rounded">
+      <div className="bg-white shadow rounded-[10px]">
         <div className="p-2 md:p-6">
-          <h3 className="text-lg text-gray-900 mb-4">Transaction amounts</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Transaction amounts</h3>
           <ReactApexChart type="bar" series={series} options={options} />
         </div>
       </div>
